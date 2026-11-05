@@ -12,7 +12,6 @@
     --arabic: #8b5e34; --shadow: 0 2px 12px rgba(0,0,0,0.06);
     --term-bg: #fcfbf8; --example-bg: #f0ebe0;
     --header-grad: linear-gradient(135deg, #1f6f5c 0%, #2d8f75 100%);
-    --btn-bg: #e0dcd2; --btn-hover: #d0ccc2;
   }
   [data-theme="dim"] {
     --bg: #2a2d31; --card: #34383d; --text: #e8e6e0; --muted: #a8a49c;
@@ -20,7 +19,6 @@
     --arabic: #d4a574; --shadow: 0 2px 12px rgba(0,0,0,0.3);
     --term-bg: #303439; --example-bg: #3d4147;
     --header-grad: linear-gradient(135deg, #1a5447 0%, #236b59 100%);
-    --btn-bg: #454a50; --btn-hover: #555a60;
   }
   [data-theme="dark"] {
     --bg: #121417; --card: #1c1f24; --text: #e8e6e0; --muted: #8a8880;
@@ -28,7 +26,6 @@
     --arabic: #c99b6a; --shadow: 0 2px 12px rgba(0,0,0,0.5);
     --term-bg: #20242a; --example-bg: #262b31;
     --header-grad: linear-gradient(135deg, #0f3d33 0%, #155247 100%);
-    --btn-bg: #2a2e33; --btn-hover: #3a3e43;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -46,6 +43,7 @@
     border-bottom: 1px solid var(--border); box-shadow: 0 2px 10px rgba(0,0,0,0.08);
     padding: 10px 16px; display: flex; justify-content: center; gap: 10px;
     flex-wrap: wrap; transition: background 0.35s ease, border-color 0.35s ease;
+    align-items: center;
   }
   .toggle-group {
     display: inline-flex; background: var(--accent-light); border-radius: 999px;
@@ -59,6 +57,22 @@
   .toggle-group button:hover { color: var(--text); }
   .toggle-group button.active { background: var(--accent); color: #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
   .toggle-group button .icon { margin-right: 4px; }
+
+  /* AUDIO PLAYER BUTTON */
+  .audio-btn {
+    background: var(--accent); color: white; border: none; padding: 6px 16px;
+    border-radius: 999px; font-size: 0.85rem; font-weight: bold; cursor: pointer;
+    display: flex; align-items: center; gap: 8px; transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  }
+  .audio-btn:hover { opacity: 0.9; transform: scale(1.02); }
+  .audio-btn.playing { background: #d9534f; animation: pulse 2s infinite; }
+  
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(217, 83, 79, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(217, 83, 79, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(217, 83, 79, 0); }
+  }
 
   /* ============ HEADER ============ */
   header {
@@ -108,35 +122,6 @@
   .term strong { color: var(--accent); }
   .term .example { display: inline-block; background: var(--example-bg); border-radius: 6px; padding: 2px 10px; font-family: "Traditional Arabic", "Amiri", serif; font-size: 1.1rem; color: var(--arabic); direction: rtl; margin: 2px 0; transition: background 0.35s ease, color 0.35s ease; }
 
-  /* ============ AUDIO BUTTON ============ */
-  .speak-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--btn-bg);
-    color: var(--text);
-    border: none;
-    border-radius: 50%;
-    width: 28px;
-    height: 28px;
-    font-size: 0.85rem;
-    cursor: pointer;
-    margin-left: 6px;
-    transition: all 0.2s ease;
-    vertical-align: middle;
-  }
-  .speak-btn:hover { background: var(--btn-hover); transform: scale(1.1); }
-  .speak-btn.playing {
-    background: var(--accent);
-    color: #fff;
-    animation: pulse 1s infinite;
-  }
-  @keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(31, 111, 92, 0.4); }
-    70% { box-shadow: 0 0 0 8px rgba(31, 111, 92, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(31, 111, 92, 0); }
-  }
-
   /* ============ CALLOUT ============ */
   .callout { background: var(--accent-light); border-radius: 10px; padding: 16px 20px; margin: 18px 0; font-size: 0.95rem; border-left: 4px solid var(--accent); transition: background 0.35s ease; }
   .callout strong { color: var(--accent); }
@@ -177,6 +162,7 @@
     .term h3 { font-size: 1.05rem; }
     .toolbar { padding: 8px 10px; gap: 6px; }
     .toggle-group button { padding: 5px 10px; font-size: 0.75rem; }
+    .audio-btn { padding: 6px 12px; font-size: 0.8rem; }
   }
 </style>
 </head>
@@ -184,6 +170,11 @@
 
 <!-- ============ TOOLBAR ============ -->
 <div class="toolbar">
+  <!-- BUTANG AUDIO BACA KESELURUHAN BUKU -->
+  <button id="audioBtn" class="audio-btn">
+    <span id="audioIcon">▶️</span> <span id="audioText">Main Buku</span>
+  </button>
+
   <div class="toggle-group" role="group" aria-label="Theme">
     <button data-theme-btn="light" class="active" title="Light Mode"><span class="icon">☀️</span><span class="ms">Cerah</span><span class="en">Light</span></button>
     <button data-theme-btn="dim" title="Dim Mode"><span class="icon">🌤️</span><span class="ms">Suram</span><span class="en">Dim</span></button>
@@ -771,6 +762,10 @@
     document.documentElement.lang = lang;
     langBtns.forEach(b => b.classList.toggle('active', b.dataset.langBtn === lang));
     try { localStorage.setItem('tajwid-lang', lang); } catch(e) {}
+    
+    // Jika tukar bahasa, berhentikan bacaan audio untuk elak bercampur
+    if(window.speechSynthesis) window.speechSynthesis.cancel();
+    resetAudioBtn();
   }
   langBtns.forEach(btn => {
     btn.addEventListener('click', () => setLang(btn.dataset.langBtn));
@@ -789,68 +784,89 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
-  // ===== TEXT TO SPEECH (AUDIO BUTTON) =====
-  // Cari semua elemen yang ada class 'arabic' dan 'example'
-  const arabicElements = document.querySelectorAll('.arabic, .example');
-  
-  // Sediakan fungsi sebut
-  function speakArabic(text, btnElement) {
-    if ('speechSynthesis' in window) {
-      // Hentikan bacaan sebelumnya jika ada
-      window.speechSynthesis.cancel();
+  // ===== TEXT TO SPEECH (BACA KESELURUHAN BUKU) =====
+  const audioBtn = document.getElementById('audioBtn');
+  const audioIcon = document.getElementById('audioIcon');
+  const audioText = document.getElementById('audioText');
+  let isPlaying = false;
+  let utterance = null;
 
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'ar-SA'; // Set bahasa Arab
-      utterance.rate = 0.8; // Perlahankan sedikit supaya jelas
-
-      // Cuba cari voice Arab dalam telefon (jika ada)
-      const voices = window.speechSynthesis.getVoices();
-      const arVoice = voices.find(v => v.lang.startsWith('ar'));
-      if (arVoice) {
-        utterance.voice = arVoice;
-      }
-
-      // Efek visual pada butang
-      btnElement.classList.add('playing');
-      
-      utterance.onend = () => {
-        btnElement.classList.remove('playing');
-      };
-      
-      utterance.onerror = () => {
-        btnElement.classList.remove('playing');
-      };
-
-      window.speechSynthesis.speak(utterance);
-    } else {
-      alert("Maaf, pelayar anda tidak menyokong fungsi audio ini.");
-    }
+  function resetAudioBtn() {
+    isPlaying = false;
+    audioBtn.classList.remove('playing');
+    audioIcon.innerText = '▶️';
+    
+    // Teks butang ikut bahasa
+    const lang = document.body.getAttribute('data-lang');
+    audioText.innerText = (lang === 'ms') ? 'Main Buku' : 'Play Book';
   }
 
-  // Masukkan butang speaker pada setiap teks Arab
-  arabicElements.forEach(el => {
-    // Ambil teks Arab sahaja (buang teks lain jika ada)
-    const textToSpeak = el.innerText.trim();
-    if (!textToSepeaking) return; // skip kalau kosong
+  audioBtn.addEventListener('click', () => {
+    if (!('speechSynthesis' in window)) {
+      alert("Maaf, pelayar anda tidak menyokong fungsi audio ini.");
+      return;
+    }
 
-    // Cipta butang
-    const btn = document.createElement('button');
-    btn.className = 'speak-btn';
-    btn.innerHTML = '🔊';
-    btn.title = 'Dengar bacaan';
-    btn.setAttribute('aria-label', 'Dengar bacaan Arab');
+    if (isPlaying) {
+      // Berhenti
+      window.speechSynthesis.cancel();
+      resetAudioBtn();
+    } else {
+      // Mula Main
+      window.speechSynthesis.cancel(); // Pastikan tiada audio lain
+      
+      // 1. Ambil teks mengikut bahasa yang dipilih
+      const lang = document.body.getAttribute('data-lang');
+      const langClass = (lang === 'ms') ? '.ms' : '.en';
+      
+      // 2. Ambil semua elemen teks penting (Tajuk, Paragraf, Senarai)
+      const elements = document.querySelectorAll(`main ${langClass} h2, main ${langClass} h3, main ${langClass} p`);
+      
+      // 3. Susun teks jadi satu perenggan panjang
+      let fullText = "";
+      elements.forEach(el => {
+        // Buang teks yang dalam span 'example' atau 'arabic' supaya tak baca huruf Arab pelik
+        let clone = el.cloneNode(true);
+        clone.querySelectorAll('.example, .arabic').forEach(e => e.remove());
+        
+        let text = clone.innerText.trim();
+        if (text) fullText += text + ". \n\n"; // Tambah noktah dan jarak untuk jeda
+      });
 
-    // Letak butang selepas teks Arab
-    el.parentNode.insertBefore(btn, el.nextSibling);
+      // Tambah intro (Nota Kaki)
+      fullText = (lang === 'ms') 
+        ? "Selamat mendengar Buku Asas Tajwid. " + fullText 
+        : "Welcome to the Basic Tajwid Book. " + fullText;
 
-    // Fungsi bila butang ditekan
-    btn.addEventListener('click', (e) => {
-      e.preventDefault(); // Elak page lompat
-      speakArabic(textToSpeak, btn);
-    });
+      // 4. Sediakan enjin suara
+      utterance = new SpeechSynthesisUtterance(fullText);
+      utterance.lang = (lang === 'ms') ? 'ms-MY' : 'en-US'; // Suara Melayu atau Inggeris
+      utterance.rate = 0.9; // Laju sikit supaya tak bosan
+      
+      // Cuba cari suara yang sesuai dalam telefon
+      const voices = window.speechSynthesis.getVoices();
+      const preferredVoice = voices.find(v => v.lang.startsWith(utterance.lang.substring(0,2)));
+      if (preferredVoice) utterance.voice = preferredVoice;
+
+      // 5. Update visual butang
+      isPlaying = true;
+      audioBtn.classList.add('playing');
+      audioIcon.innerText = '⏹️';
+      audioText.innerText = (lang === 'ms') ? 'Berhenti' : 'Stop';
+
+      // 6. Bila habis baca, reset butang
+      utterance.onend = () => { resetAudioBtn(); };
+      utterance.onerror = () => { resetAudioBtn(); };
+
+      // 7. Mula baca
+      window.speechSynthesis.speak(utterance);
+      
+      // Auto-scroll ke atas supaya user boleh ikut baca
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   });
 
-  // Pastikan suara Arab dimuatkan (sesetengah pelayar ambil masa)
+  // Pastikan senarai suara dimuatkan
   if ('speechSynthesis' in window) {
     window.speechSynthesis.onvoiceschanged = () => {};
   }
