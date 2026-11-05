@@ -12,6 +12,7 @@
     --arabic: #8b5e34; --shadow: 0 2px 12px rgba(0,0,0,0.06);
     --term-bg: #fcfbf8; --example-bg: #f0ebe0;
     --header-grad: linear-gradient(135deg, #1f6f5c 0%, #2d8f75 100%);
+    --highlight: #ffebc2; /* Warna sorotan baca */
   }
   [data-theme="dim"] {
     --bg: #2a2d31; --card: #34383d; --text: #e8e6e0; --muted: #a8a49c;
@@ -19,6 +20,7 @@
     --arabic: #d4a574; --shadow: 0 2px 12px rgba(0,0,0,0.3);
     --term-bg: #303439; --example-bg: #3d4147;
     --header-grad: linear-gradient(135deg, #1a5447 0%, #236b59 100%);
+    --highlight: #3d4a3a;
   }
   [data-theme="dark"] {
     --bg: #121417; --card: #1c1f24; --text: #e8e6e0; --muted: #8a8880;
@@ -26,6 +28,7 @@
     --arabic: #c99b6a; --shadow: 0 2px 12px rgba(0,0,0,0.5);
     --term-bg: #20242a; --example-bg: #262b31;
     --header-grad: linear-gradient(135deg, #0f3d33 0%, #155247 100%);
+    --highlight: #2a3a32;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -56,17 +59,17 @@
   }
   .toggle-group button:hover { color: var(--text); }
   .toggle-group button.active { background: var(--accent); color: #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
-  .toggle-group button .icon { margin-right: 4px; }
 
-  /* AUDIO PLAYER BUTTON */
-  .audio-btn {
+  /* AUDIO & SCROLL BUTTONS */
+  .audio-btn, .scroll-btn {
     background: var(--accent); color: white; border: none; padding: 6px 16px;
     border-radius: 999px; font-size: 0.85rem; font-weight: bold; cursor: pointer;
     display: flex; align-items: center; gap: 8px; transition: all 0.3s ease;
     box-shadow: 0 2px 6px rgba(0,0,0,0.15);
   }
-  .audio-btn:hover { opacity: 0.9; transform: scale(1.02); }
+  .audio-btn:hover, .scroll-btn:hover { opacity: 0.9; transform: scale(1.02); }
   .audio-btn.playing { background: #d9534f; animation: pulse 2s infinite; }
+  .scroll-btn.active { background: #c9a227; color: #fff; }
   
   @keyframes pulse {
     0% { box-shadow: 0 0 0 0 rgba(217, 83, 79, 0.4); }
@@ -122,11 +125,9 @@
   .term strong { color: var(--accent); }
   .term .example { display: inline-block; background: var(--example-bg); border-radius: 6px; padding: 2px 10px; font-family: "Traditional Arabic", "Amiri", serif; font-size: 1.1rem; color: var(--arabic); direction: rtl; margin: 2px 0; transition: background 0.35s ease, color 0.35s ease; }
 
-  /* ============ CALLOUT ============ */
+  /* ============ CALLOUT & DISCLAIMER ============ */
   .callout { background: var(--accent-light); border-radius: 10px; padding: 16px 20px; margin: 18px 0; font-size: 0.95rem; border-left: 4px solid var(--accent); transition: background 0.35s ease; }
   .callout strong { color: var(--accent); }
-
-  /* ============ DISCLAIMER ============ */
   .disclaimer { background: var(--card); border: 1px solid var(--border); border-left: 4px solid #c9a227; border-radius: 10px; padding: 20px 24px; margin-bottom: 28px; font-size: 0.92rem; transition: background 0.35s ease, border-color 0.35s ease; }
   .disclaimer h3 { font-size: 1rem; color: #c9a227; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
   .disclaimer p { color: var(--muted); margin-bottom: 8px; }
@@ -139,18 +140,27 @@
   .nasihat .translation { font-style: italic; color: var(--muted); font-size: 0.95rem; margin-bottom: 6px; }
   .nasihat .source { font-size: 0.82rem; color: var(--accent); font-weight: 600; }
 
-  /* ============ FOOTER ============ */
+  /* ============ FOOTER & TOP BTN ============ */
   footer { text-align: center; padding: 40px 20px 60px; color: var(--muted); font-size: 0.88rem; }
   footer .heart { color: var(--accent); }
   footer .footer-note { margin-top: 14px; font-size: 0.8rem; max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.6; }
-
-  /* ============ BACK TO TOP ============ */
   .top-btn { position: fixed; bottom: 24px; right: 24px; width: 46px; height: 46px; border-radius: 50%; background: var(--accent); color: #fff; border: none; font-size: 1.3rem; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,0.25); display: none; align-items: center; justify-content: center; z-index: 99; transition: opacity 0.3s, background 0.35s ease; }
   .top-btn.show { display: flex; }
 
-  /* ============ LANGUAGE SWITCHING ============ */
+  /* ============ LANGUAGE SWITCHING & HIGHLIGHT ============ */
   [data-lang="ms"] .en { display: none !important; }
   [data-lang="en"] .ms { display: none !important; }
+  
+  /* Sorotan semasa baca */
+  .reading-highlight {
+    background-color: var(--highlight) !important;
+    border-radius: 6px;
+    padding: 4px 8px;
+    margin-left: -8px;
+    margin-right: -8px;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 0 0 2px var(--highlight);
+  }
 
   @media (max-width: 600px) {
     header { padding: 40px 16px 36px; }
@@ -162,7 +172,7 @@
     .term h3 { font-size: 1.05rem; }
     .toolbar { padding: 8px 10px; gap: 6px; }
     .toggle-group button { padding: 5px 10px; font-size: 0.75rem; }
-    .audio-btn { padding: 6px 12px; font-size: 0.8rem; }
+    .audio-btn, .scroll-btn { padding: 6px 12px; font-size: 0.8rem; }
   }
 </style>
 </head>
@@ -170,15 +180,17 @@
 
 <!-- ============ TOOLBAR ============ -->
 <div class="toolbar">
-  <!-- BUTANG AUDIO BACA KESELURUHAN BUKU -->
   <button id="audioBtn" class="audio-btn">
     <span id="audioIcon">▶️</span> <span id="audioText">Main Buku</span>
   </button>
+  <button id="scrollBtn" class="scroll-btn" style="display:none;" title="Skrol automatik">
+    <span id="scrollIcon">⏸️</span> <span id="scrollText">Pause Skrol</span>
+  </button>
 
   <div class="toggle-group" role="group" aria-label="Theme">
-    <button data-theme-btn="light" class="active" title="Light Mode"><span class="icon">☀️</span><span class="ms">Cerah</span><span class="en">Light</span></button>
-    <button data-theme-btn="dim" title="Dim Mode"><span class="icon">🌤️</span><span class="ms">Suram</span><span class="en">Dim</span></button>
-    <button data-theme-btn="dark" title="Dark Mode"><span class="icon">🌙</span><span class="ms">Gelap</span><span class="en">Dark</span></button>
+    <button data-theme-btn="light" class="active" title="Light Mode">☀️</button>
+    <button data-theme-btn="dim" title="Dim Mode">🌤️</button>
+    <button data-theme-btn="dark" title="Dark Mode">🌙</button>
   </div>
   <div class="toggle-group" role="group" aria-label="Language">
     <button data-lang-btn="ms" class="active" title="Bahasa Melayu">BM</button>
@@ -213,7 +225,6 @@
 
 <main class="container">
 
-  <!-- ============ DISCLAIMER ============ -->
   <div class="disclaimer">
     <h3>⚠️ <span class="ms">Nota Penting</span><span class="en">Important Note</span></h3>
     <p class="ms">Buku ini disusun oleh <strong>DeepSeek (AI)</strong>, bukan guru agama. Ia bertujuan membantu <strong>memahami istilah asas</strong> sahaja — bukan menggantikan pengajaran guru.</p>
@@ -222,7 +233,6 @@
     <p class="en">Please <strong>refer to a qualified teacher or religious scholar</strong> for authentic learning. Any errors in this book are the compiler's shortcomings, not the teachings of Islam.</p>
   </div>
 
-  <!-- ============ KATA PENGANTAR ============ -->
   <section class="chapter" id="pengantar">
     <h2><span class="ms">Kata Pengantar</span><span class="en">Preface</span></h2>
     <div class="ms">
@@ -235,7 +245,6 @@
     </div>
   </section>
 
-  <!-- ============ BAHAGIAN 1 ============ -->
   <section class="chapter" id="bahagian-1">
     <h2><span class="ms">Bahagian 1: Tanda-Tanda Asas</span><span class="en">Part 1: Basic Marks</span></h2>
     <p class="chapter-intro ms">Tanda-tanda yang paling kerap dijumpai dalam tulisan Arab.</p>
@@ -362,7 +371,6 @@
     </div>
   </section>
 
-  <!-- ============ BAHAGIAN 2 ============ -->
   <section class="chapter" id="bahagian-2">
     <h2><span class="ms">Bahagian 2: Huruf Panjang (Mad)</span><span class="en">Part 2: Long Vowels (Mad)</span></h2>
     <p class="chapter-intro ms">Huruf panjang hanya tiga: <span class="example">ا و ي</span> (alif, wau, ya).</p>
@@ -459,7 +467,6 @@
     </div>
   </section>
 
-  <!-- ============ BAHAGIAN 3 ============ -->
   <section class="chapter" id="bahagian-3">
     <h2><span class="ms">Bahagian 3: Hukum Nun Mati &amp; Tanwin</span><span class="en">Part 3: Rules of Nun Sukun &amp; Tanwin</span></h2>
     <p class="chapter-intro ms"><strong>Nun mati:</strong> <span class="example">نْ</span> &nbsp;|&nbsp; <strong>Tanwin:</strong> <span class="example">ـً ـٍ ـٌ</span><br>Tengok <strong>huruf selepas</strong> nun mati/tanwin.</p>
@@ -526,7 +533,6 @@
     </div>
   </section>
 
-  <!-- ============ BAHAGIAN 4 ============ -->
   <section class="chapter" id="bahagian-4">
     <h2><span class="ms">Bahagian 4: Hukum Mim Mati</span><span class="en">Part 4: Rules of Mim Sukun</span></h2>
     <p class="chapter-intro ms"><strong>Mim mati:</strong> <span class="example">مْ</span></p>
@@ -578,7 +584,6 @@
     </div>
   </section>
 
-  <!-- ============ BAHAGIAN 5 ============ -->
   <section class="chapter" id="bahagian-5">
     <h2><span class="ms">Bahagian 5: Bunyi Khas</span><span class="en">Part 5: Special Sounds</span></h2>
 
@@ -613,7 +618,6 @@
     </div>
   </section>
 
-  <!-- ============ BAHAGIAN 6 ============ -->
   <section class="chapter" id="bahagian-6">
     <h2><span class="ms">Bahagian 6: Berhenti &amp; Sambung</span><span class="en">Part 6: Stopping &amp; Continuing</span></h2>
 
@@ -663,7 +667,6 @@
     </div>
   </section>
 
-  <!-- ============ BAHAGIAN 7 ============ -->
   <section class="chapter" id="bahagian-7">
     <h2><span class="ms">Bahagian 7: Tebal &amp; Nipis</span><span class="en">Part 7: Heavy &amp; Light</span></h2>
 
@@ -698,7 +701,6 @@
     </div>
   </section>
 
-  <!-- ============ NASIHAT ============ -->
   <div class="nasihat">
     <div class="arabic-quote">خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ</div>
     <div class="translation ms">"Sebaik-baik kamu ialah orang yang belajar Al-Quran dan mengajarkannya."</div>
@@ -706,7 +708,6 @@
     <div class="source">— Hadis riwayat Bukhari</div>
   </div>
 
-  <!-- ============ PENUTUP ============ -->
   <section class="chapter" id="penutup">
     <h2><span class="ms">Penutup</span><span class="en">Closing</span></h2>
     <div class="ms">
@@ -762,8 +763,6 @@
     document.documentElement.lang = lang;
     langBtns.forEach(b => b.classList.toggle('active', b.dataset.langBtn === lang));
     try { localStorage.setItem('tajwid-lang', lang); } catch(e) {}
-    
-    // Jika tukar bahasa, hentikan bacaan audio
     if(window.speechSynthesis) window.speechSynthesis.cancel();
     resetAudioBtn();
   }
@@ -784,13 +783,49 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
-  // ===== TEXT TO SPEECH (BACA KESELURUHAN BUKU - CHAINING) =====
+  // ===== AUTO-SCROLL LOGIC =====
+  const scrollBtn = document.getElementById('scrollBtn');
+  const scrollIcon = document.getElementById('scrollIcon');
+  const scrollText = document.getElementById('scrollText');
+  let isAutoScrolling = false;
+  let scrollSpeed = 1; // 1 = perlahan, 2 = sederhana
+  let scrollInterval = null;
+
+  function startAutoScroll() {
+    if (scrollInterval) return;
+    isAutoScrolling = true;
+    scrollBtn.classList.add('active');
+    scrollIcon.innerText = '⏸️';
+    scrollText.innerText = (document.body.getAttribute('data-lang') === 'ms') ? 'Pause' : 'Pause';
+
+    scrollInterval = setInterval(() => {
+      if (!isAutoScrolling) return;
+      window.scrollBy({ top: scrollSpeed, behavior: 'auto' });
+    }, 50); // 50ms = 20fps, sangat lancar
+  }
+
+  function stopAutoScroll() {
+    isAutoScrolling = false;
+    scrollBtn.classList.remove('active');
+    scrollIcon.innerText = '▶️';
+    scrollText.innerText = (document.body.getAttribute('data-lang') === 'ms') ? 'Mula Skrol' : 'Start Scroll';
+    clearInterval(scrollInterval);
+    scrollInterval = null;
+  }
+
+  scrollBtn.addEventListener('click', () => {
+    if (isAutoScrolling) stopAutoScroll();
+    else startAutoScroll();
+  });
+
+  // ===== TEXT TO SPEECH & HIGHLIGHT =====
   const audioBtn = document.getElementById('audioBtn');
   const audioIcon = document.getElementById('audioIcon');
   const audioText = document.getElementById('audioText');
   let isPlaying = false;
   let currentTextIndex = 0;
   let textChunks = [];
+  let chunkElements = []; // Simpan elemen HTML untuk sorotan
 
   function resetAudioBtn() {
     isPlaying = false;
@@ -799,6 +834,13 @@
     const lang = document.body.getAttribute('data-lang');
     audioText.innerText = (lang === 'ms') ? 'Main Buku' : 'Play Book';
     currentTextIndex = 0;
+    
+    // Buang sorotan
+    document.querySelectorAll('.reading-highlight').forEach(el => el.classList.remove('reading-highlight'));
+    
+    // Hentikan auto-scroll juga
+    stopAutoScroll();
+    scrollBtn.style.display = 'none';
   }
 
   audioBtn.addEventListener('click', () => {
@@ -808,26 +850,29 @@
     }
 
     if (isPlaying) {
-      // Berhenti
       window.speechSynthesis.cancel();
       resetAudioBtn();
     } else {
-      // Mula Main
       window.speechSynthesis.cancel();
       
       const lang = document.body.getAttribute('data-lang');
       const langClass = (lang === 'ms') ? '.ms' : '.en';
       
-      // Ambil semua teks dan pecahkan kepada kepingan kecil (perenggan)
       textChunks = [];
+      chunkElements = [];
+      
+      // Ambil perenggan (p, h2, h3, li)
       const elements = document.querySelectorAll(`main ${langClass} h2, main ${langClass} h3, main ${langClass} p, main ${langClass} li`);
       
       elements.forEach(el => {
-        // Clone untuk buang teks Arab
         let clone = el.cloneNode(true);
         clone.querySelectorAll('.example, .arabic').forEach(e => e.remove());
         let text = clone.innerText.trim();
-        if (text) textChunks.push(text);
+        
+        if (text) {
+          textChunks.push(text);
+          chunkElements.push(el); // Simpan rujukan HTML
+        }
       });
 
       if(textChunks.length === 0) return;
@@ -837,6 +882,10 @@
       audioIcon.innerText = '⏹️';
       audioText.innerText = (lang === 'ms') ? 'Berhenti' : 'Stop';
       currentTextIndex = 0;
+      
+      // Tunjuk butang skrol
+      scrollBtn.style.display = 'flex';
+      stopAutoScroll(); // Reset dulu
 
       playChunk(lang);
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -845,23 +894,31 @@
 
   function playChunk(lang) {
     if (!isPlaying || currentTextIndex >= textChunks.length) {
-      resetAudioBtn(); // Habis baca
+      resetAudioBtn();
       return;
     }
 
+    // 1. SOROTAN (Highlight) & AUTO-SCROLL
+    document.querySelectorAll('.reading-highlight').forEach(el => el.classList.remove('reading-highlight'));
+    const currentEl = chunkElements[currentTextIndex];
+    currentEl.classList.add('reading-highlight');
+
+    // Auto skrol perlahan ke elemen tersebut
+    const yOffset = -80; // Offset supaya tak tertutup toolbar
+    const y = currentEl.getBoundingClientRect().top + window.pageYOffset + yOffset;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+
+    // 2. MAIN AUDIO
     const text = textChunks[currentTextIndex];
     let utterance = new SpeechSynthesisUtterance(text);
     
-    // Set bahasa
     utterance.lang = (lang === 'ms') ? 'ms-MY' : 'en-US';
     utterance.rate = 0.95;
     
-    // Cuba cari suara yang sesuai
     const voices = window.speechSynthesis.getVoices();
     const preferredVoice = voices.find(v => v.lang.startsWith(lang));
     if (preferredVoice) utterance.voice = preferredVoice;
 
-    // Bila habis satu perenggan, sambung perenggan seterusnya
     utterance.onend = () => {
       currentTextIndex++;
       playChunk(lang);
