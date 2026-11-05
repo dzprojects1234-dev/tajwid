@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buku Asas Tajwid — Mengenal Hukum Bacaan Al-Quran</title>
+<style>
+  :root {
+    --bg: #f8f5ef;
+    --card: #ffffff;
+    --text: #2c2c2c;
+    --muted: #6b6b6b;
+    --accent: #1f6f5c;
+    --accent-light: #e6f2ee;
+    --border: #e0dcd2;
+    --arabic: #8b5e34;
+    --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.75;
+    font-size: 16px;
+  }
+  .container { max-width: 820px; margin: 0 auto; padding: 0 20px; }
+
+  /* Header */
+  header {
+    background: linear-gradient(135deg, #1f6f5c 0%, #2d8f75 100%);
+    color: #fff;
+    padding: 60px 20px 50px;
+    text-align: center;
+  }
+  header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  header .subtitle {
+    font-size: 1.05rem;
+    opacity: 0.92;
+    font-weight: 400;
+  }
+  header .badge {
+    display: inline-block;
+    margin-top: 18px;
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.35);
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    letter-spacing: 0.5px;
+  }
+
+  /* Table of contents */
+  nav.toc {
+    background: var(--card);
+    margin: -28px auto 40px;
+    max-width: 820px;
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 26px 28px;
+    position: relative;
+    z-index: 2;
+  }
+  nav.toc h2 {
+    font-size: 1.05rem;
+    color: var(--accent);
+    margin-bottom: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  nav.toc ol { list-style: none; counter-reset: toc; }
+  nav.toc li {
+    counter-increment: toc;
+    padding: 7px 0;
+    border-bottom: 1px dashed var(--border);
+  }
+  nav.toc li:last-child { border-bottom: none; }
+  nav.toc a {
+    color: var(--text);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: color 0.2s;
+  }
+  nav.toc a:hover { color: var(--accent); }
+  nav.toc li::before {
+    content: counter(toc);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 26px;
+    height: 26px;
+    background: var(--accent-light);
+    color: var(--accent);
+    border-radius: 50%;
+    font-size: 0.78rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* Sections */
+  section.chapter {
+    background: var(--card);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 32px 28px;
+    margin-bottom: 28px;
+  }
+  section.chapter > h2 {
+    font-size: 1.35rem;
+    color: var(--accent);
+    border-bottom: 3px solid var(--accent-light);
+    padding-bottom: 12px;
+    margin-bottom: 8px;
+  }
+  section.chapter > .chapter-intro {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin-bottom: 22px;
+  }
+
+  /* Term cards */
+  .term {
+    border-left: 4px solid var(--accent);
+    background: #fcfbf8;
+    border-radius: 0 10px 10px 0;
+    padding: 18px 20px;
+    margin-bottom: 18px;
+  }
+  .term:last-child { margin-bottom: 0; }
+  .term h3 {
+    font-size: 1.12rem;
+    color: var(--text);
+    margin-bottom: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .term h3 .arabic {
+    color: var(--arabic);
+    font-size: 1.35rem;
+    font-weight: 400;
+    direction: rtl;
+    font-family: "Traditional Arabic", "Amiri", "Scheherazade New", serif;
+  }
+  .term .label {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--accent);
+    background: var(--accent-light);
+    padding: 3px 9px;
+    border-radius: 5px;
+    margin-bottom: 4px;
+  }
+  .term p { margin-bottom: 8px; font-size: 0.97rem; }
+  .term p:last-child { margin-bottom: 0; }
+  .term strong { color: var(--accent); }
+  .term .example {
+    display: inline-block;
+    background: #f0ebe0;
+    border-radius: 6px;
+    padding: 2px 10px;
+    font-family: "Traditional Arabic", "Amiri", serif;
+    font-size: 1.1rem;
+    color: var(--arabic);
+    direction: rtl;
+    margin: 2px 0;
+  }
+
+  /* Callout */
+  .callout {
+    background: var(--accent-light);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 18px 0;
+    font-size: 0.95rem;
+    border-left: 4px solid var(--accent);
+  }
+  .callout strong { color: var(--accent); }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 40px 20px 60px;
+    color: var(--muted);
+    font-size: 0.88rem;
+  }
+  footer .heart { color: var(--accent); }
+
+  /* Back to top */
+  .top-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    font-size: 1.3rem;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(31,111,92,0.4);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 99;
+    transition: opacity 0.3s;
+  }
+  .top-btn.show { display: flex; }
+
+  @media (max-width: 600px) {
+    header { padding: 44px 16px 40px; }
+    header h1 { font-size: 1.5rem; }
+    header .subtitle { font-size: 0.95rem; }
+    nav.toc { margin: -24px 12px 28px; padding: 20px; }
+    section.chapter { padding: 24px 18px; margin-left: 12px; margin-right: 12px; }
+    .term { padding: 15px 16px; }
+    .term h3 { font-size: 1.05rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <h1>Buku Asas Tajwid</h1>
+    <p class="subtitle">Mengenal Hukum Bacaan Al-Quran</p>
+    <span class="badge">Versi Bahasa Melayu · Level Asas</span>
+  </div>
+</header>
+
+<nav class="toc">
+  <h2>Kandungan</h2>
+  <ol>
+    <li><a href="#pengantar">Kata Pengantar</a></li>
+    <li><a href="#bahagian-1">Tanda-Tanda Asas</a></li>
+    <li><a href="#bahagian-2">Huruf Panjang (Mad)</a></li>
+    <li><a href="#bahagian-3">Hukum Nun Mati &amp; Tanwin</a></li>
+    <li><a href="#bahagian-4">Hukum Mim Mati</a></li>
+    <li><a href="#bahagian-5">Bunyi Khas</a></li>
+    <li><a href="#bahagian-6">Berhenti &amp; Sambung</a></li>
+    <li><a href="#bahagian-7">Tebal &amp; Nipis</a></li>
+    <li><a href="#penutup">Penutup</a></li>
+  </ol>
+</nav>
+
+<main class="container">
+
+  <!-- KATA PENGANTAR -->
+  <section class="chapter" id="pengantar">
+    <h2>Kata Pengantar</h2>
+    <p>Buku ini ditulis untuk pembaca yang <strong>belum kenal bahasa Arab</strong> tetapi ingin memahami bacaan Al-Quran. Setiap istilah Arab dibedah dari <strong>akar katanya</strong>, diterangkan <strong>mengapa ia dinamakan begitu</strong>, kemudian barulah diberi <strong>makna dalam tajwid</strong>. Tiada istilah yang dibiarkan tanpa terjemahan.</p>
+    <p style="margin-top:12px;">Buku ini <strong>bukan</strong> untuk menghafal nama. Ia untuk <strong>memahami</strong> — supaya pembaca tidak sekadar menyebut seperti burung kakak tua, tetapi tahu apa yang dibaca.</p>
+  </section>
+
+  <!-- BAHAGIAN 1 -->
+  <section class="chapter" id="bahagian-1">
+    <h2>Bahagian 1: Tanda-Tanda Asas</h2>
+    <p class="chapter-intro">Tanda-tanda yang paling kerap dijumpai dalam tulisan Arab.</p>
+
+    <div class="term">
+      <span class="label">Akar Bahasa</span>
+      <h3>Fathah <span class="arabic">فَتْحَة</span></h3>
+      <p><strong>Akar bahasa:</strong> Daripada kata kerja <strong>فَتَحَ (fataha)</strong> — "membuka". <em>Fathah</em> bermaksud "satu perbuatan membuka".</p>
+      <p><strong>Sebab nama:</strong> Kerana menyebut bunyi "a" membuatkan <strong>mulut terbuka</strong>.</p>
+      <p><strong>Makna tajwid:</strong> Baris di atas huruf (ـَ) yang melambangkan bunyi vokal <strong>"a"</strong>.</p>
+    </div>
+
+    <div class="term">
+      <span class="label">Akar Bahasa</span>
+      <h3>Kasrah <span class="arabic">كَسْرَة</span></h3>
+      <p><strong>Akar bahasa:</strong> Daripada kata kerja <strong>كَسَرَ (kasara)</strong> — "memecah, mematahkan". <em>Kasrah</em> bermaksud "satu perbuatan memecah".</p>
+      <p><strong>Sebab nama:</strong> Kerana menyebut bunyi "i" membuatkan <strong>mulut mengecil</strong> seolah-olah "terpecah" ke bawah.</p>
+      <p><strong>Makna tajwid:</strong> Baris di bawah huruf (ـِ) yang melambangkan bunyi vokal <strong>"i"</strong>.</p>
+    </div>
+
+    <div class="term">
+      <span class="label">Akar Bahasa</span>
+      <h3>Dhammah <span class="arabic">ضَمَّة</span></h3>
+      <p><strong>Akar bahasa:</strong> Daripada kata kerja <strong>ضَمَّ (damma)</strong> — "menghimpun, mengumpul". <em>Dhammah</em> bermaksud "satu perbuatan menghimpun".</p>
+      <p><strong>Sebab nama:</strong> Kerana menyebut bunyi "u" membuatkan <strong>bibir dihimpunkan</strong> ke depan.</p>
+      <p><strong>Makna tajwid:</strong> Tanda seperti wau kecil di atas huruf (ـُ) yang melambangkan bunyi vokal <strong>"u"</strong>.</p>
+    </div>
+
+    <div class="term">
+      <span class="label">Akar Bahasa</span>
+      <h3>Sukun <span class="arabic">سُكُون</span></h3>
+      <p><strong>Akar bahasa:</strong> Daripada kata <strong>سَكَنَ (sakana)</strong> — "diam, berhenti, tidak bergerak". Daripada akar yang sama datang perkataan <em>sakinah</em> (ketenangan).</p>
+      <p><strong>Sebab nama:</strong> Kerana huruf itu <strong>berhenti</strong> daripada bergerak dengan vokal. Ia tidak berbunyi a, i, atau u — ia <strong>diam</strong>.</p>
+      <p><strong>Makna tajwid:</strong> Bulatan kecil di atas huruf (ـْ) yang menandakan huruf itu <strong>mati</strong> — tidak mempunyai vokal.</p>
+    </div>
+
+    <div class="term">
+      <span class="label">Akar Bahasa</span>
+      <h3>Tasydid <span class="arabic">تَشْدِيد</span> / Sabdu</h3>
+      <p><strong>Akar bahasa:</strong> Daripada kata <strong>شَدَّ (syadda)</strong> — "mengikat, menguatkan, menekan". <em>Tasydid</em> bermaksud "menjadikan kuat".</p>
+      <p><strong>Sebab nama:</strong> Kerana huruf itu dibaca dengan <strong>tekanan</strong>, seolah-olah diikat kuat. Dalam bahasa Melayu kita sebut <strong>"sabdu"</strong> (serapan daripada perkataan ini).</p>
+      <p><strong>Makna tajwid:</strong> Tanda seperti "w" kecil di atas huruf (ـّ) yang menandakan huruf itu <strong>dibaca dua kali</strong> — sebenarnya dua huruf: satu mati, satu hidup, dicantumkan.</p>
+    </div>
+
+    <div class="term">
+      <span class="label">Akar Bahasa</span>
+      <h3>Tanwin <span class="arabic">تَنْوِين</span></h3>
+      <p><strong>Akar bahasa:</strong> Daripada kata <strong>نَوَّنَ (nawwana)</strong> — "memberi nun". Akarnya ialah huruf <strong>ن</strong> (nun).</p>
+      <p><strong>Sebab nama:</strong> Kerana tanda ini <strong>tidak menulis huruf nun</strong>, tetapi <strong>membunyikan "n"</strong> di hujung perkataan. Kita dengar bunyi "n", tetapi tidak nampak huruf nun.</p>
+      <p><strong>Makna tajwid:</strong> Dua baris di hujung perkataan (ـً ـٍ ـٌ) yang dibaca sebagai <strong>nun mati</strong> dalam sebutan, tetapi tidak ditulis sebagai nun.</p>
+    </div>
+
+    <div class="term">
+      <span class="label">Akar Bahasa</span>
+      <h3>Hamzah <span class="arabic">هَمْزَة</span></h3>
+      <p><strong>Akar bahasa:</strong> Daripada kata <strong>هَمَزَ (hamaza)</strong> — "menekan, mencubit, menusuk". <em>Hamzah</em> bermaksud "satu tekanan".</p>
+      <p><strong>Sebab nama:</strong> Kerana menyebut huruf ini memerlukan <strong>tekanan dari kerongkong</strong>. Bunyi itu "ditahan" dan "dilepaskan", bukan mengalir perlahan.</p>
+      <p><strong>Makna tajwid:</strong> Huruf <strong>ء</strong>, iaitu bunyi hentian dari kerongkong. Ia boleh menerima baris, berbeza dengan alif yang tidak boleh.</p>
+    </div>
+
+    <div class="term">
+      <span class="label">Akar Bahasa</span>
+      <h3>Harakat <span class="arabic">حَرَكَات</span></h3>
+      <p><strong>Akar bahasa:</strong> Daripada kata <strong>حَرَكَة (harakah)</strong> — "gerakan". Jamaknya <em>harakat</em>.</p>
+      <p><strong>Sebab nama:</strong> Kerana tanda-tanda ini membuatkan huruf <strong>"bergerak"</strong> dengan bunyi vokal. Tanpa harakat, huruf itu "diam" (sukun).</p>
+      <p><strong>Makna tajwid:</strong> Dua penggunaan: (1) tanda vokal seperti fathah, kasrah, dhammah; (2) <strong>kiraan panjang</strong> bacaan.</p>
+    </div>
+  </section>
+
+  <!-- BAHAGIAN 2 -->
+  <section class="chapter" id="bahagian-2">
+    <h2>Bahagian 2: Huruf Panjang (Mad)</h2>
+    <p class="chapter-intro">Huruf panjang hanya tiga: <span class="example">ا و ي</span> (alif, wau, ya).</p>
+
+    <div class="term">
+      <span class="label">Akar Bahasa</span>
+      <h3>Mad <span class="arabic">مَدّ</span></h3>
+      <p><strong>Akar bahasa:</strong> Daripada kata <strong>مَدَّ (madda)</strong> — "memanjangkan, menambahkan". <em>Mad</em> bermaksud "tambahan".</p>
+      <p><strong>Sebab nama:</strong> Kerana bunyi vokal itu <strong>ditambah panjangnya</strong> daripada biasa. Bukan lagi "a" pendek, tetapi "aa" yang dipanjangkan.</p>
+      <p><strong>Makna tajwid:</strong> Memanjangkan suara dengan salah satu daripada tiga huruf mad mengikut kadar tertentu (2, 4, atau 6 harakat).</p>
+    </div>
+
+    <div class="term">
+      <span class="label">Akar Bahasa</span>
+      <h3>Mad Thabi'i <span class="arabic">مَدّ طَبِيعِي</span></h3>
+      <p><strong>Akar bahasa:</strong> <strong>طَبِيعِي</strong> daripada kata <strong>طَبْع (tab')</strong> — "tabiat, sifat semula jadi".</p>
+      <p><strong>Sebab nama:</strong> Kerana panjang ini adalah <strong>tabiat asal</strong> sesuatu huruf panjang. Ia berlaku secara semula jadi tanpa sebab tambahan.</p>
+      <p><strong>Makna tajwid:</strong> Huruf panjang yang <strong>tidak diikuti hamzah atau sukun</strong>. Dibaca <strong>2 harakat</strong>. Contoh: <span class="example">قَالَ</span> (qāla), <span class="example">قِيلَ</span> (qīla), <span class="example">يَقُولُ</span> (yaqūlu).</p>
+    </div>
+
+    <div class="term">
+      <span class="label">Akar Bahasa</span>
+      <h3>Mad Jaiz Munfasil <span class="arabic">مَدّ جَائِز مُنْفَصِل</span></h3>
+      <p><strong>Akar bahasa:</strong> <strong>جَائِز</strong> daripada <strong>جَازَ (jāza)</strong> — "harus, dibenarkan". <strong>مُنْفَصِل</strong> daripada <strong>فَصَلَ (fasala)</strong> — "berpisah".</p>
+      <p><strong>Sebab nama:</strong> Huruf panjang di <strong>hujung satu perkataan</strong>, hamzah di <strong>permulaan perkataan lain</strong> — keduanya <strong>berpisah</strong>. Hukumnya <strong>harus</strong> (boleh 2 atau 4 harakat).</p>
+      <p><strong>Makna tajwid:</strong> Mad thabi'i di hujung kata + hamzah di kata berikutnya. Dibaca <strong>4 harakat</strong> (atau 2).</p>
+    </div>
+
+    <div class="term">
+      <span class="label">Akar Bahasa</span>
+      <h3>Mad Wajib Muttasil <span class="arabic">مَدّ وَاجِب مُتَّصِل</span></h3>
+      <p><strong>Akar bahasa:</strong> <strong>وَاجِب</strong> daripada <strong>وَجَبَ (wajaba)</strong> — "wajib, mesti". <strong>مُتَّصِل</strong> daripada <strong>وَصَلَ (wasala)</strong> — "bersambung".</p>
+      <p><strong>Sebab nama:</strong> Huruf panjang dan hamzah berada <strong>dalam satu perkataan</strong> — <strong>bersambung</strong>. Hukumnya <strong>wajib</strong> dipanjangkan.</p>
+      <p><strong>Makna tajwid:</strong> Mad thabi'i + hamzah dalam satu kata. Dibaca <strong>4 harakat</strong>.</p>
+    </div>
+
+    <div class="term">
+      <span class="label">Akar Bahasa</span>
+      <h3>Mad Arid Lissukun <span class="arabic">مَدّ عَارِض لِلسُّكُون</span></h3>
+      <p><strong>Akar bahasa:</strong> <strong>عَارِض</strong> daripada <strong>عَرَضَ ('arada)</strong> — "datang kemudian, muncul". <strong>لِلسُّكُون</strong> — "kerana sukun (mati)".</p>
+      <p><strong>Sebab nama:</strong> Panjang ini <strong>datang kemudian</strong> — bukan asal. Ia muncul <strong>kerana</strong> kita <strong>berhenti</strong> pada huruf terakhir, lalu huruf itu menjadi mati.</p>
+      <p><strong>Makna tajwid:</strong> Mad thabi'i di hujung kata, kemudian kita <strong>berhenti</strong> (waqaf). Dibaca <strong>2, 4, atau 6 harakat</strong> (pilih satu, kekalkan).</p>
+    </div>
+
+    <div class="term">
+      <span class="label">Akar Bahasa</span>
+      <h3>Mad Lazim <span class="arabic">مَدّ لَازِم</span></h3>
+      <p><strong>Akar bahasa:</strong> <strong>لَازِم</strong> daripada <strong>لَزِمَ (lazima)</strong> — "mesti, tidak boleh tidak".</p>
+      <p><strong>Sebab nama:</strong> Panjang ini <strong>mesti</strong> dibaca penuh. Tidak boleh dipendekkan.</p>
+      <p><strong>Makna tajwid:</strong> Huruf panjang diikuti <strong>huruf mati asli</strong> atau <strong>huruf bertasydid</strong> dalam satu kata. Dibaca <strong>6 harakat</strong>. Contoh: <span class="example">الضَّالِّينَ</span> (aḍ-ḍāllīn), <span class="example">الم</span> (alif lām mīm).</p>
+    </div>
+  </section>
+
+  <!-- BAHAGIAN 3 -->
+  <section class="chapter" id="bahagian-3">
+    <h2>Bahagian 3: Hukum Nun Mati &amp; Tanwin</h2>
+    <p class="chapter-intro"><strong>Nun mati:</strong> <span class="example">نْ</span> &nbsp;|&nbsp; <strong>Tanwin:</strong> <span class="example">ـً ـٍ ـٌ</span><br>Tengok <strong>huruf selepas</strong> nun mati/tanwin.</p>
+
+    <div class="term">
+      <span class="label">Akar Bahasa</span>
+      <h3>Izhar <span class="arabic">إِظْهَار</span></h3>
+      <p><strong>Akar bahasa:</strong> Daripada <strong>أَظْهَرَ (azhara)</strong> — "menampakkan, menjelaskan". Akarnya <strong>ظَهَرَ</strong> — "muncul, nyata".</p>
+      <p><strong>Sebab nama:</strong> Bunyi nun <strong>ditampakkan dengan jelas</strong> — tidak disamarkan, tidak dimasukkan.</p>
+      <p><strong>Makna tajwid:</strong> Nun mati/tanwin bertemu <strong>6 huruf kerongkong</strong> (<span class="example">ء ه ع ح غ خ</span>). Dibaca <strong>jelas</strong> tanpa dengung.</p>
+    </div>
+
+    <div class="term">
+      <span class="label">Akar Bahasa</span>
+      <h3>Idgham <span class="arabic">إِدْغَام</span></h3>
+      <p><strong>Akar bahasa:</strong> Daripada <strong>أَدْغَمَ (adghama)</strong> — "memasukkan sesuatu ke dalam sesuatu".</p>
+      <p><strong>Sebab nama:</strong> Bunyi nun <strong>"masuk"</strong> ke dalam huruf selepasnya — melebur, tidak lagi berasingan.</p>
+      <p><strong>Makna tajwid:</strong> Nun mati/tanwin bertemu <strong>6 huruf</strong> (<span class="example">ي ر م ل و ن</span>). Nun <strong>dimasukkan</strong> ke huruf tersebut. Ada yang <strong>dengan dengung</strong> (<span class="example">ي ن م و</span>) dan <strong>tanpa dengung</strong> (<span class="example">ل ر</span>).</p>
+    </div>
+
+    <div class="term">
+      <span class="label">Akar Bahasa</span>
+      <h3>Ikhfa <span class="arabic">إِخْفَاء</span></h3>
+      <p><strong>Akar bahasa:</strong> Daripada <strong>أَخْفَى (akhfā)</strong> — "menyembunyikan, menyamarkan". Akarnya <strong>خَفِيَ</strong> — "tersembunyi".</p>
+      <p><strong>Sebab nama:</strong> Bunyi nun <strong>tidak ditampakkan sepenuhnya</strong> (seperti izhar), <strong>tidak juga dimasukkan sepenuhnya</strong> (seperti idgham). Ia <strong>samar-samar</strong> di pertengahan.</p>
+      <p><strong>Makna tajwid:</strong> Nun mati/tanwin bertemu <strong>15 huruf</strong>. Dibaca <strong>samar-samar</strong> antara jelas dan melebur, serta <strong>didengungkan</strong>.</p>
+    </div>
+
+    <div class="term">
+      <span class="label">Akar Bahasa</span>
+      <h3>Iqlab <span class="arabic">إِقْلَاب</span></h3>
+      <p><strong>Akar bahasa:</strong> Daripada <strong>أَقْلَبَ (aqlaba)</strong> — "menukar, membalikkan". Akarnya <strong>قَلَبَ</strong> — "membalik".</p>
+      <p><strong>Sebab nama:</strong> Bunyi nun <strong>ditukar</strong> kepada bunyi mim. Ia <strong>"dibalikkan"</strong> menjadi "m".</p>
+      <p><strong>Makna tajwid:</strong> Nun mati/tanwin bertemu huruf <span class="example">ب</span> sahaja. Nun <strong>ditukar menjadi mim</strong> dan dibaca dengan <strong>dengung</strong>.</p>
+    </div>
+  </section>
+
+  <!-- BAHAGIAN 4 -->
+  <section class="chapter" id="bahagian-4">
+    <h2>Bahagian 4: Hukum Mim Mati</h2>
+    <p class="chapter-intro"><strong>Mim mati:</strong> <span class="example">مْ</span></p>
+
+    <div class="term">
+      <span class="label">Akar Bahasa</span>
+      <h3>Ikhfa Syafawi <span class="arabic">إِخْفَاء شَفَوِي</span></h3>
+      <p><strong>Akar bahasa:</strong> <strong>إِخْفَاء</strong> — "menyamarkan". <strong>شَفَوِي</strong> daripada <strong>شَفَة (syafah)</strong> — "bibir".</p>
+      <p><strong>Sebab nama:</strong> Bunyi mim <strong>disamarkan</strong>, dan huruf yang terlibat adalah huruf <strong>bibir</strong> (<span class="example">ب</span>).</p>
+      <p><strong>Makna tajwid:</strong> Mim mati bertemu huruf <span class="example">ب</span>. Dibaca <strong>samar</strong> dengan dengung.</p>
+    </div>
+
+    <div class="term">
+      <span class="label">Akar Bahasa</span>
+      <h3>Idgham Mimi <span class="arabic">إِدْغَام مِيمِي</span></h3>
+      <p><strong>Akar bahasa:</strong> <strong>إِدْغَام</strong> — "memasukkan" + <strong>مِيمِي</strong> — "berkaitan mim".</p>
+      <p><strong>Sebab nama:</strong> Mim <strong>dimasukkan</strong> ke dalam mim yang lain — dua mim menjadi satu.</p>
+      <p><strong>Makna tajwid:</strong> Mim mati bertemu huruf <span class="example">م</span>. Dibaca <strong>cantum</strong> dengan dengung.</p>
+    </div>
+
+    <div class="term">
+      <span class="label">Akar Bahasa</span>
+      <h3>Izhar Syafawi <span class="arabic">إِظْهَار شَفَوِي</span></h3>
+      <p><strong>Akar bahasa:</strong> <strong>إِظْهَار</strong> — "menampakkan" + <strong>شَفَوِي</strong> — "bibir".</p>
+      <p><strong>Sebab nama:</strong> Bunyi mim <strong>ditampakkan dengan jelas</strong> pada huruf bibir.</p>
+      <p><strong>Makna tajwid:</strong> Mim mati bertemu <strong>selain</strong> <span class="example">ب</span> dan <span class="example">م</span>. Dibaca <strong>jelas</strong> tanpa dengung.</p>
+    </div>
+  </section>
+
+  <!-- BAHAGIAN 5 -->
+  <section class="chapter" id="bahagian-5">
+    <h2>Bahagian 5: Bunyi Khas</h2>
+
+    <div class="term">
+      <span class="label">Akar Bahasa</span>
+      <h3>Ghunnah <span class="arabic">غُنَّة</span></h3>
+      <p><strong>Akar bahasa:</strong> <strong>غُنَّة</strong> bermaksud <strong>"bunyi yang keluar dari rongga hidung"</strong> — suara lembut dari dalam hidung, lidah tidak memainkan peranan.</p>
+      <p><strong>Sebab nama:</strong> Bunyi ini benar-benar <strong>keluar dari hidung</strong>. Jika hidung dicubit dan bunyi terhenti, itulah ghunnah.</p>
+      <p><strong>Makna tajwid:</strong> Sifat yang <strong>semestinya ada</strong> pada huruf <span class="example">ن</span> dan <span class="example">م</span>. Kadarnya biasa <strong>2 harakat</strong>.</p>
+    </div>
+
+    <div class="term">
+      <span class="label">Akar Bahasa</span>
+      <h3>Qalqalah <span class="arabic">قَلْقَلَة</span></h3>
+      <p><strong>Akar bahasa:</strong> Daripada <strong>قَلْقَلَ (qalqala)</strong> — "menggoncang, menggeletar".</p>
+      <p><strong>Sebab nama:</strong> Huruf ini <strong>tidak boleh dibaca tenang</strong> sahaja. Ia perlu <strong>memantul, bergetar</strong> sedikit.</p>
+      <p><strong>Makna tajwid:</strong> Lima huruf: <span class="example">ق ط ب ج د</span>. Apabila <strong>mati</strong>, dibaca dengan <strong>pantulan</strong> yang jelas tetapi tidak berlebihan.</p>
+    </div>
+  </section>
+
+  <!-- BAHAGIAN 6 -->
+  <section class="chapter" id="bahagian-6">
+    <h2>Bahagian 6: Berhenti &amp; Sambung</h2>
+
+    <div class="term">
+      <span class="label">Akar Bahasa</span>
+      <h3>Waqaf <span class="arabic">وَقْف</span></h3>
+      <p><strong>Akar bahasa:</strong> Daripada <strong>وَقَفَ (waqafa)</strong> — "berhenti, berdiri".</p>
+      <p><strong>Sebab nama:</strong> Pembaca <strong>berhenti</strong> sebentar pada sesuatu tempat.</p>
+      <p><strong>Makna tajwid:</strong> <strong>Berhenti</strong> pada akhir perkataan dengan memutuskan suara dan nafas, kemudian menyambung semula.</p>
+    </div>
+
+    <div class="term">
+      <span class="label">Akar Bahasa</span>
+      <h3>Wasal <span class="arabic">وَصْل</span></h3>
+      <p><strong>Akar bahasa:</strong> Daripada <strong>وَصَلَ (wasala)</strong> — "bersambung, menyambung".</p>
+      <p><strong>Sebab nama:</strong> Bacaan <strong>disambung</strong> tanpa berhenti.</p>
+      <p><strong>Makna tajwid:</strong> <strong>Menyambung</strong> bacaan antara dua perkataan tanpa waqaf.</p>
+    </div>
+
+    <div class="term">
+      <span class="label">Akar Bahasa</span>
+      <h3>Ibtida' <span class="arabic">اِبْتِدَاء</span></h3>
+      <p><strong>Akar bahasa:</strong> Daripada <strong>بَدَأَ (bada'a)</strong> — "memula, memulai".</p>
+      <p><strong>Sebab nama:</strong> Tempat <strong>memulakan</strong> bacaan.</p>
+      <p><strong>Makna tajwid:</strong> <strong>Mula</strong> membaca selepas berhenti.</p>
+    </div>
+  </section>
+
+  <!-- BAHAGIAN 7 -->
+  <section class="chapter" id="bahagian-7">
+    <h2>Bahagian 7: Tebal &amp; Nipis</h2>
+
+    <div class="term">
+      <span class="label">Akar Bahasa</span>
+      <h3>Tafkhim <span class="arabic">تَفْخِيم</span></h3>
+      <p><strong>Akar bahasa:</strong> Daripada <strong>فَخَّمَ (fakhkhama)</strong> — "menebalkan, membesarkan". Akarnya <strong>فَخُمَ</strong> — "tebal, besar".</p>
+      <p><strong>Sebab nama:</strong> Bunyi huruf <strong>ditebalkan</strong> — mulut dan suara menjadi penuh.</p>
+      <p><strong>Makna tajwid:</strong> Membaca huruf dengan <strong>tebal</strong> (contoh: huruf isti'la' seperti <span class="example">خ ص ض ط ظ غ ق</span>).</p>
+    </div>
+
+    <div class="term">
+      <span class="label">Akar Bahasa</span>
+      <h3>Tarqiq <span class="arabic">تَرْقِيق</span></h3>
+      <p><strong>Akar bahasa:</strong> Daripada <strong>رَقَّقَ (raqqaqa)</strong> — "menipiskan, melembutkan". Akarnya <strong>رَقَّ</strong> — "nipis".</p>
+      <p><strong>Sebab nama:</strong> Bunyi huruf <strong>dinipiskan</strong> — mulut tidak penuh.</p>
+      <p><strong>Makna tajwid:</strong> Membaca huruf dengan <strong>nipis</strong> (contoh: huruf istifal).</p>
+    </div>
+  </section>
+
+  <!-- PENUTUP -->
+  <section class="chapter" id="penutup">
+    <h2>Penutup</h2>
+    <p>Buku ini mengandungi <strong>hukum asal</strong> sahaja — yang paling kerap dijumpai dalam bacaan harian. Setiap istilah diterangkan dari <strong>akar bahasa</strong>, <strong>sebab nama</strong>, dan <strong>makna tajwid</strong>.</p>
+    <div class="callout">
+      <strong>Prinsip pembelajaran:</strong><br>
+      1. Faham dulu, hafal kemudian.<br>
+      2. Satu istilah sehari lebih baik daripada sepuluh sekali gus.<br>
+      3. Rujuk buku ini setiap kali jumpa istilah dalam bacaan.
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Buku Asas Tajwid · Versi Bahasa Melayu · Level Asas</p>
+  <p style="margin-top:6px;">Dibina untuk pembaca yang ingin <span class="heart">memahami</span>, bukan sekadar menyebut.</p>
+</footer>
+
+<button class="top-btn" id="topBtn" aria-label="Kembali ke atas">↑</button>
+
+<script>
+  const topBtn = document.getElementById('topBtn');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 400) {
+      topBtn.classList.add('show');
+    } else {
+      topBtn.classList.remove('show');
+    }
+  });
+  topBtn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+
+</body>
+</html>
