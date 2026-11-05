@@ -763,7 +763,7 @@
     langBtns.forEach(b => b.classList.toggle('active', b.dataset.langBtn === lang));
     try { localStorage.setItem('tajwid-lang', lang); } catch(e) {}
     
-    // Jika tukar bahasa, berhentikan bacaan audio untuk elak bercampur
+    // Jika tukar bahasa, hentikan bacaan audio
     if(window.speechSynthesis) window.speechSynthesis.cancel();
     resetAudioBtn();
   }
@@ -784,21 +784,21 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
-  // ===== TEXT TO SPEECH (BACA KESELURUHAN BUKU) =====
+  // ===== TEXT TO SPEECH (BACA KESELURUHAN BUKU - CHAINING) =====
   const audioBtn = document.getElementById('audioBtn');
   const audioIcon = document.getElementById('audioIcon');
   const audioText = document.getElementById('audioText');
   let isPlaying = false;
-  let utterance = null;
+  let currentTextIndex = 0;
+  let textChunks = [];
 
   function resetAudioBtn() {
     isPlaying = false;
     audioBtn.classList.remove('playing');
     audioIcon.innerText = '▶️';
-    
-    // Teks butang ikut bahasa
     const lang = document.body.getAttribute('data-lang');
     audioText.innerText = (lang === 'ms') ? 'Main Buku' : 'Play Book';
+    currentTextIndex = 0;
   }
 
   audioBtn.addEventListener('click', () => {
@@ -813,60 +813,68 @@
       resetAudioBtn();
     } else {
       // Mula Main
-      window.speechSynthesis.cancel(); // Pastikan tiada audio lain
+      window.speechSynthesis.cancel();
       
-      // 1. Ambil teks mengikut bahasa yang dipilih
       const lang = document.body.getAttribute('data-lang');
       const langClass = (lang === 'ms') ? '.ms' : '.en';
       
-      // 2. Ambil semua elemen teks penting (Tajuk, Paragraf, Senarai)
-      const elements = document.querySelectorAll(`main ${langClass} h2, main ${langClass} h3, main ${langClass} p`);
+      // Ambil semua teks dan pecahkan kepada kepingan kecil (perenggan)
+      textChunks = [];
+      const elements = document.querySelectorAll(`main ${langClass} h2, main ${langClass} h3, main ${langClass} p, main ${langClass} li`);
       
-      // 3. Susun teks jadi satu perenggan panjang
-      let fullText = "";
       elements.forEach(el => {
-        // Buang teks yang dalam span 'example' atau 'arabic' supaya tak baca huruf Arab pelik
+        // Clone untuk buang teks Arab
         let clone = el.cloneNode(true);
         clone.querySelectorAll('.example, .arabic').forEach(e => e.remove());
-        
         let text = clone.innerText.trim();
-        if (text) fullText += text + ". \n\n"; // Tambah noktah dan jarak untuk jeda
+        if (text) textChunks.push(text);
       });
 
-      // Tambah intro (Nota Kaki)
-      fullText = (lang === 'ms') 
-        ? "Selamat mendengar Buku Asas Tajwid. " + fullText 
-        : "Welcome to the Basic Tajwid Book. " + fullText;
+      if(textChunks.length === 0) return;
 
-      // 4. Sediakan enjin suara
-      utterance = new SpeechSynthesisUtterance(fullText);
-      utterance.lang = (lang === 'ms') ? 'ms-MY' : 'en-US'; // Suara Melayu atau Inggeris
-      utterance.rate = 0.9; // Laju sikit supaya tak bosan
-      
-      // Cuba cari suara yang sesuai dalam telefon
-      const voices = window.speechSynthesis.getVoices();
-      const preferredVoice = voices.find(v => v.lang.startsWith(utterance.lang.substring(0,2)));
-      if (preferredVoice) utterance.voice = preferredVoice;
-
-      // 5. Update visual butang
       isPlaying = true;
       audioBtn.classList.add('playing');
       audioIcon.innerText = '⏹️';
       audioText.innerText = (lang === 'ms') ? 'Berhenti' : 'Stop';
+      currentTextIndex = 0;
 
-      // 6. Bila habis baca, reset butang
-      utterance.onend = () => { resetAudioBtn(); };
-      utterance.onerror = () => { resetAudioBtn(); };
-
-      // 7. Mula baca
-      window.speechSynthesis.speak(utterance);
-      
-      // Auto-scroll ke atas supaya user boleh ikut baca
+      playChunk(lang);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   });
 
-  // Pastikan senarai suara dimuatkan
+  function playChunk(lang) {
+    if (!isPlaying || currentTextIndex >= textChunks.length) {
+      resetAudioBtn(); // Habis baca
+      return;
+    }
+
+    const text = textChunks[currentTextIndex];
+    let utterance = new SpeechSynthesisUtterance(text);
+    
+    // Set bahasa
+    utterance.lang = (lang === 'ms') ? 'ms-MY' : 'en-US';
+    utterance.rate = 0.95;
+    
+    // Cuba cari suara yang sesuai
+    const voices = window.speechSynthesis.getVoices();
+    const preferredVoice = voices.find(v => v.lang.startsWith(lang));
+    if (preferredVoice) utterance.voice = preferredVoice;
+
+    // Bila habis satu perenggan, sambung perenggan seterusnya
+    utterance.onend = () => {
+      currentTextIndex++;
+      playChunk(lang);
+    };
+    
+    utterance.onerror = () => {
+      resetAudioBtn();
+    };
+
+    window.speechSynthesis.speak(utterance);
+  }
+
+  // Pastikan suara dimuatkan
   if ('speechSynthesis' in window) {
     window.speechSynthesis.onvoiceschanged = () => {};
   }
